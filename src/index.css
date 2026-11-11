@@ -142,6 +142,31 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
+/* Myanmar uses a different rhythm from the compact English interface. Keep
+   native Myanmar fonts ahead of Inter so glyphs and combining marks render
+   with the script-appropriate metrics when available on the device. */
+html[lang="my-MM"] {
+  font-family: "Noto Sans Myanmar", "Myanmar Text", "Myanmar MN", "Padauk", "Inter Variable", sans-serif;
+}
+
+html[lang="my-MM"] * {
+  letter-spacing: normal;
+}
+
+html[lang="my-MM"] body {
+  line-height: 1.75;
+}
+
+html[lang="my-MM"] :where(h1, h2, h3, h4) {
+  line-height: 1.45;
+  letter-spacing: normal;
+}
+
+html[lang="my-MM"] :where(button, input, select, textarea) {
+  line-height: 1.6;
+  letter-spacing: normal;
+}
+
 ::selection {
   color: white;
   background: oklch(0.48 0.2 264);
