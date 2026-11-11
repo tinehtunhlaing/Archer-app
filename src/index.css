@@ -128,3 +128,26 @@
     @apply font-sans;
     }
 }
+
+html,
+body,
+#root {
+  min-height: 100%;
+}
+
+body {
+  min-width: 320px;
+  margin: 0;
+  font-feature-settings: "ss01" on, "cv11" on;
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection {
+  color: white;
+  background: oklch(0.48 0.2 264);
+}
+
+* {
+  scrollbar-color: oklch(0.82 0.012 285) transparent;
+  scrollbar-width: thin;
+}

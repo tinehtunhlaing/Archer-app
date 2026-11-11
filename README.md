@@ -1,21 +1,38 @@
-# React + TypeScript + Vite + shadcn/ui
+# Archer App
 
-This is a template for a new Vite project with React, TypeScript, and shadcn/ui.
+The web client for Archer, maintained as an independent project and Git repository. Built with React, React Router, TanStack Query, Vite, and the shadcn/ui preset `beEhfqy2`.
 
-## Adding components
+## Local development
 
-To add components to your app, run the following command:
-
-```bash
-npx shadcn@latest add button
+```sh
+npm install
+cp .env.example .env
+npm run dev
 ```
 
-This will place the ui components in the `src/components` directory.
+The app expects the API at `http://localhost:4000/api`. Set `VITE_API_URL` in `.env` to use another API origin. Make sure the API is running and its database has been migrated.
 
-## Using components
+To create the local demo data and accounts, run `npm run db:seed` from the sibling `api/` project.
 
-To use the components in your app, import them as follows:
+## Commands
 
-```tsx
-import { Button } from "@/components/ui/button"
-```
+- `npm run dev` — start Vite locally
+- `npm run build` — type-check and build production assets
+- `npm run preview` — preview a production build
+- `npm run lint` — run ESLint
+
+## Auth and money
+
+The MVP stores its short-lived bearer token in `sessionStorage`, so it is cleared when the browser session ends. Job and proposal amounts are sent as decimal strings with a currency code; the app does not convert between currencies or process payments.
+
+## Demo login accounts
+
+Run the API seed command first. These accounts exist only in the local sample database:
+
+| Role | Email | Password |
+|---|---|---|
+| Client | `seed.client.001@archer.example.test` | `ArcherSample2026!` |
+| Freelancer | `seed.freelancer.001@archer.example.test` | `ArcherSample2026!` |
+| Admin | `demo.admin@archer.example.test` | `ArcherSample2026!` |
+
+All three use synthetic `.test` email addresses. Admin sign-in works, but admin workflows are not implemented in the web app yet. Do not use these demo credentials outside local development.
