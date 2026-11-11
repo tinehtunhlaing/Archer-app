@@ -1,3 +1,6 @@
+import en from "@/i18n/en.json"
+import my from "@/i18n/my.json"
+
 export type Role = "CLIENT" | "FREELANCER" | "ADMIN"
 export type Currency = "USD" | "MMK"
 
@@ -8,7 +11,6 @@ export type User = {
   profile?: Profile | null
   createdAt?: string
 }
-
 export type Profile = {
   id?: string
   userId?: string
@@ -97,11 +99,19 @@ async function apiResponse<T>(path: string, init: RequestInit = {}): Promise<{ d
   const headers = new Headers(init.headers)
   if (init.body && !headers.has("Content-Type")) headers.set("Content-Type", "application/json")
   if (accessToken) headers.set("Authorization", `Bearer ${accessToken}`)
+  const selectedLocale = typeof localStorage !== "undefined" && localStorage.getItem("archer.language") === "my"
+    ? "my"
+    : typeof document !== "undefined" && document.documentElement.lang.startsWith("my") ? "my" : "en"
+  headers.set("Accept-Language", selectedLocale)
+  const localize = (message: string, values: Record<string, string | number> = {}) => {
+    const translation = selectedLocale === "my" ? my[message as keyof typeof my] ?? message : en[message as keyof typeof en] ?? message
+    return Object.entries(values).reduce((text, [key, value]) => text.replaceAll(`{{${key}}}`, String(value)), translation)
+  }
   let response: Response
   try {
     response = await fetch(`${API_BASE}${path}`, { ...init, headers })
   } catch {
-    throw new ApiError("Could not reach Archer API. Check that the API server is running.", 0, "NETWORK_ERROR")
+    throw new ApiError(localize("Could not reach Archer API. Check that the API server is running."), 0, "NETWORK_ERROR")
   }
 
   const payload = await response.json().catch(() => null) as
@@ -109,12 +119,12 @@ async function apiResponse<T>(path: string, init: RequestInit = {}): Promise<{ d
     | null
   if (!response.ok) {
     throw new ApiError(
-      payload?.error?.message || `Request failed (${response.status})`,
+      payload?.error?.message || localize("Request failed ({{status}})", { status: response.status }),
       response.status,
       payload?.error?.code,
     )
   }
-  if (!payload || !("data" in payload)) throw new ApiError("The API returned an unexpected response.", response.status)
+  if (!payload || !("data" in payload)) throw new ApiError(localize("The API returned an unexpected response."), response.status)
   return { data: payload.data as T, ...(payload.nextCursor !== undefined ? { nextCursor: payload.nextCursor } : {}) }
 }
 
@@ -126,20 +136,20 @@ export async function apiRequestPage<T>(path: string): Promise<{ data: T; nextCu
   return apiResponse<T>(path)
 }
 
-export function formatMoney(min: string | null, max: string | null, currency: Currency, type: Job["budgetType"]) {
-  if (!min || !max) return type === "HOURLY" ? `Hourly · ${currency}` : `Budget open · ${currency}`
-  const left = formatAmount(min, currency)
-  const right = formatAmount(max, currency)
-  return `${left} – ${right}${type === "HOURLY" ? " / hr" : ""}`
+export function formatMoney(min: string | null, max: string | null, currency: Currency, type: Job["budgetType"], locale: "en" | "my" = "en") {
+  if (!min || !max) return locale === "my" ? (type === "HOURLY" ? `နာရီအလိုက် · ${currency}` : `ဘတ်ဂျက်ညှိနှိုင်းရန် · ${currency}`) : type === "HOURLY" ? `Hourly · ${currency}` : `Budget open · ${currency}`
+  const left = formatAmount(min, currency, locale)
+  const right = formatAmount(max, currency, locale)
+  return `${left} – ${right}${type === "HOURLY" ? (locale === "my" ? " / နာရီ" : " / hr") : ""}`
 }
 
-export function formatAmount(value: string, currency: Currency) {
+export function formatAmount(value: string, currency: Currency, locale: "en" | "my" = "en") {
   const [whole = "0", rawFraction = ""] = value.split(".")
   const fraction = currency === "USD"
     ? rawFraction.padEnd(2, "0").slice(0, Math.max(2, rawFraction.length))
     : rawFraction.replace(/0+$/, "")
   try {
-    return new Intl.NumberFormat("en-US", {
+    return new Intl.NumberFormat(locale === "my" ? "my-MM" : "en-US", {
       style: "currency", currency, minimumFractionDigits: 0, maximumFractionDigits: 0,
     }).format(BigInt(whole)) + (fraction ? `.${fraction}` : currency === "USD" ? ".00" : "")
   } catch {
@@ -147,8 +157,15 @@ export function formatAmount(value: string, currency: Currency) {
   }
 }
 
-export function timeAgo(isoDate: string) {
+export function timeAgo(isoDate: string, locale: "en" | "my" = "en") {
   const days = Math.max(0, Math.floor((Date.now() - new Date(isoDate).getTime()) / 86_400_000))
+  if (locale === "my") {
+    if (days === 0) return "ယနေ့"
+    if (days === 1) return "မနေ့က"
+    if (days < 30) return `${new Intl.NumberFormat("my-MM").format(days)} ရက်ခန့်က`
+    if (days < 365) return `${new Intl.NumberFormat("my-MM").format(Math.floor(days / 30))} လခန့်က`
+    return `${new Intl.NumberFormat("my-MM").format(Math.floor(days / 365))} နှစ်ခန့်က`
+  }
   if (days === 0) return "Today"
   if (days === 1) return "Yesterday"
   if (days < 30) return `${days} days ago`

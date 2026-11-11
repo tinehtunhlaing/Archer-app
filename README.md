@@ -25,6 +25,8 @@ To create the local demo data and accounts, run `npm run db:seed` from the sibli
 
 The MVP stores its short-lived bearer token in `sessionStorage`, so it is cleared when the browser session ends. Job and proposal amounts are sent as decimal strings with a currency code; the app does not convert between currencies or process payments.
 
+The interface is available in English and Burmese. The language selector saves its choice in browser storage. User-authored project, profile, proposal, and message text is shown as written.
+
 ## Demo login accounts
 
 Run the API seed command first. These accounts exist only in the local sample database:

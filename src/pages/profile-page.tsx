@@ -6,12 +6,14 @@ import { Button } from "@/components/ui/button"
 import { ErrorState, LoadingState, PageTitle, RequireRole } from "@/components/app-layout"
 import { ApiError, apiRequest, type Profile } from "@/lib/api"
 import { useAuth } from "@/lib/auth-context"
+import { useI18n } from "@/i18n"
 
 export function ProfilePage() {
   return <RequireRole roles={["CLIENT", "FREELANCER"]}><ProfileForm /></RequireRole>
 }
 
 function ProfileForm() {
+  const { t } = useI18n()
   const { user, refreshUser } = useAuth()
   const queryClient = useQueryClient()
   const [saved, setSaved] = useState(false)
@@ -50,32 +52,32 @@ function ProfileForm() {
   }
 
   return <div className="mx-auto max-w-4xl">
-    <Link to="/" className="mb-6 inline-flex items-center gap-2 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"><ArrowLeft size={16} /> Back to work</Link>
+    <Link to="/" className="mb-6 inline-flex items-center gap-2 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"><ArrowLeft size={16} /> {t("Back to work")}</Link>
     <div className="grid gap-6 md:grid-cols-[250px_minmax(0,1fr)]">
       <aside className="h-fit rounded-3xl border border-border/80 bg-background p-6">
         <div className="grid size-16 place-items-center rounded-2xl bg-primary/10 text-2xl font-semibold text-primary">{(profile?.displayName || user?.email || "A").slice(0, 1).toUpperCase()}</div>
-        <h2 className="mt-4 text-lg font-semibold tracking-tight">{profile?.displayName || "Your name"}</h2>
-        <p className="mt-1 text-xs text-muted-foreground">{user?.role === "CLIENT" ? "Client" : "Freelancer"} account</p>
-        <p className="mt-4 text-sm leading-6 text-muted-foreground">{profile?.headline || "Add a short headline that tells people what you do."}</p>
+        <h2 className="mt-4 text-lg font-semibold tracking-tight">{profile?.displayName || t("Your name")}</h2>
+        <p className="mt-1 text-xs text-muted-foreground">{t(user?.role === "CLIENT" ? "Client" : "Freelancer")} {t("account")}</p>
+        <p className="mt-4 text-sm leading-6 text-muted-foreground">{profile?.headline || t("Add a short headline that tells people what you do.")}</p>
         <div className="my-5 border-t border-border/70" />
-        <p className="text-[11px] font-semibold tracking-[0.14em] text-muted-foreground uppercase">Profile completeness</p>
+        <p className="text-[11px] font-semibold tracking-[0.14em] text-muted-foreground uppercase">{t("Profile completeness")}</p>
         <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-muted"><div className="h-full rounded-full bg-primary transition-[width]" style={{ width: `${completion}%` }} /></div>
-        <p className="mt-2 text-xs text-muted-foreground">Complete the details so the right projects can find you.</p>
+        <p className="mt-2 text-xs text-muted-foreground">{t("Complete the details so the right projects can find you.")}</p>
       </aside>
       <section className="rounded-3xl border border-border/80 bg-background p-6 sm:p-8">
-        <PageTitle eyebrow="Your profile" title="A little about you." description="Show people the person behind the work. Keep it real, keep it yours." />
+        <PageTitle eyebrow={t("Your profile")} title={t("A little about you.")} description={t("Show people the person behind the work. Keep it real, keep it yours.")} />
         <form onSubmit={submit} className="space-y-5">
-          <Field label="Display name" htmlFor="displayName"><input id="displayName" name="displayName" required maxLength={80} defaultValue={profile?.displayName || user?.profile?.displayName || ""} placeholder="Your name" className={inputClass} /></Field>
-          <Field label="Headline" htmlFor="headline" hint="A short description of what you do."><input id="headline" name="headline" maxLength={120} defaultValue={profile?.headline || ""} placeholder="e.g. Brand designer for early-stage teams" className={inputClass} /></Field>
-          <Field label="About you" htmlFor="bio" hint="Your experience, approach, and what kind of work you enjoy."><textarea id="bio" name="bio" rows={5} maxLength={2000} defaultValue={profile?.bio || ""} placeholder="Tell people what you bring to a project…" className={`${inputClass} h-auto resize-y py-3 leading-6`} /></Field>
+          <Field label={t("Display name")} htmlFor="displayName"><input id="displayName" name="displayName" required maxLength={80} defaultValue={profile?.displayName || user?.profile?.displayName || ""} placeholder={t("Your name")} className={inputClass} /></Field>
+          <Field label={t("Headline")} htmlFor="headline" hint={t("A short description of what you do.")}><input id="headline" name="headline" maxLength={120} defaultValue={profile?.headline || ""} placeholder={t("e.g. Brand designer for early-stage teams")} className={inputClass} /></Field>
+          <Field label={t("About you")} htmlFor="bio" hint={t("Your experience, approach, and what kind of work you enjoy.")}><textarea id="bio" name="bio" rows={5} maxLength={2000} defaultValue={profile?.bio || ""} placeholder={t("Tell people what you bring to a project…")} className={`${inputClass} h-auto resize-y py-3 leading-6`} /></Field>
           <div className="grid gap-5 sm:grid-cols-2">
-            <Field label="Location" htmlFor="location"><input id="location" name="location" maxLength={120} defaultValue={profile?.location || ""} placeholder="City, country" className={inputClass} /></Field>
-            <Field label="Skills" htmlFor="skills" hint="Separate skills with commas."><input id="skills" name="skills" defaultValue={profile?.skills?.join(", ") || ""} placeholder="Figma, research, writing…" className={inputClass} /></Field>
+            <Field label={t("Location")} htmlFor="location"><input id="location" name="location" maxLength={120} defaultValue={profile?.location || ""} placeholder={t("City, country")} className={inputClass} /></Field>
+            <Field label={t("Skills")} htmlFor="skills" hint={t("Separate skills with commas.")}><input id="skills" name="skills" defaultValue={profile?.skills?.join(", ") || ""} placeholder="Figma, research, writing…" className={inputClass} /></Field>
           </div>
-          {mutation.isError && <p role="alert" className="rounded-xl bg-destructive/5 px-4 py-3 text-sm text-destructive">{mutation.error instanceof ApiError ? mutation.error.message : "Could not save your profile."}</p>}
+          {mutation.isError && <p role="alert" className="rounded-xl bg-destructive/5 px-4 py-3 text-sm text-destructive">{mutation.error instanceof ApiError ? mutation.error.message : t("Could not save your profile.")}</p>}
           <div className="flex items-center justify-between border-t border-border/70 pt-5">
-            <span className="text-xs text-muted-foreground">Your profile can be viewed by other Archer members.</span>
-            <Button type="submit" disabled={mutation.isPending} className="gap-2 rounded-xl px-5">{saved ? <Check size={16} /> : <FloppyDisk size={16} />}{saved ? "Saved" : mutation.isPending ? "Saving…" : "Save profile"}</Button>
+            <span className="text-xs text-muted-foreground">{t("Your profile can be viewed by other Archer members.")}</span>
+            <Button type="submit" disabled={mutation.isPending} className="gap-2 rounded-xl px-5">{saved ? <Check size={16} /> : <FloppyDisk size={16} />}{saved ? t("Saved") : mutation.isPending ? t("Saving…") : t("Save profile")}</Button>
           </div>
         </form>
       </section>
