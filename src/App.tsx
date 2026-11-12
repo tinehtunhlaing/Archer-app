@@ -3,6 +3,7 @@ import { BrowserRouter, Navigate, Route, Routes } from "react-router"
 import { AuthProvider } from "@/lib/auth-context"
 import { AppLayout } from "@/components/app-layout"
 import { AuthPage } from "@/pages/auth-page"
+import { LandingPage } from "@/pages/landing-page"
 import { JobDetailPage } from "@/pages/job-detail-page"
 import { JobsPage } from "@/pages/jobs-page"
 import { MessagesPage } from "@/pages/messages-page"
@@ -23,8 +24,9 @@ export function App() {
       <AuthProvider>
         <BrowserRouter>
           <Routes>
+            <Route index element={<LandingPage />} />
             <Route element={<AppLayout />}>
-              <Route index element={<JobsPage />} />
+              <Route path="jobs" element={<JobsPage />} />
               <Route path="jobs/:jobId" element={<JobDetailPage />} />
               <Route path="jobs/new" element={<NewJobPage />} />
               <Route path="proposals" element={<ProposalsPage />} />

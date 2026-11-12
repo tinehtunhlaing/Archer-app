@@ -5,6 +5,7 @@ import { Button, buttonVariants } from "@/components/ui/button"
 import { useAuth } from "@/lib/auth-context"
 import { cn } from "@/lib/utils"
 import { LanguageSwitcher, useI18n } from "@/i18n"
+import { ThemeToggle } from "@/components/theme-toggle"
 
 export function AppLayout() {
   const { user, ready, signOut } = useAuth()
@@ -16,7 +17,7 @@ export function AppLayout() {
   }
 
   return (
-    <div className="min-h-svh bg-[#f7f8fa] text-foreground">
+    <div className="min-h-svh bg-background text-foreground">
       <header className="sticky top-0 z-30 border-b border-border/70 bg-background/90 backdrop-blur-xl">
         <div className="mx-auto flex h-[72px] max-w-[1400px] items-center justify-between px-4 sm:px-8">
           <Link to="/" className="group flex items-center gap-2.5" aria-label={t("Archer home")}>
@@ -34,6 +35,7 @@ export function AppLayout() {
           </nav>
 
           <div className="flex items-center gap-2">
+            <ThemeToggle />
             <LanguageSwitcher />
             {!ready ? <div className="h-9 w-24 animate-pulse rounded-full bg-muted" /> : user ? (
               <>

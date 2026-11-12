@@ -105,7 +105,7 @@ export function JobsPage() {
         </div>
 
         <div className="rounded-2xl border border-border/80 bg-background p-5">
-          <div className="mb-4 flex items-center gap-2.5"><span className="grid size-9 place-items-center rounded-xl bg-amber-50 text-amber-700"><UsersThree size={18} /></span><p className="text-sm font-semibold">{t("A good fit goes both ways")}</p></div>
+          <div className="mb-4 flex items-center gap-2.5"><span className="grid size-9 place-items-center rounded-xl bg-amber-50 text-amber-700 dark:bg-amber-950 dark:text-amber-200"><UsersThree size={18} /></span><p className="text-sm font-semibold">{t("A good fit goes both ways")}</p></div>
           <p className="text-xs leading-5 text-muted-foreground">{t("Share what you do, what you love, and how you work. Clear profiles help projects find the people who’ll care about them.")}</p>
           {user?.role === "CLIENT" && <Link to="/jobs/new" className={cn(buttonVariants({ variant: "outline", size: "sm" }), "mt-4 w-full justify-center gap-2")}>{t("Post a project")} <ArrowUpRight size={14} /></Link>}
         </div>
@@ -125,7 +125,7 @@ function JobCard({ job }: { job: Job }) {
   return <Link to={`/jobs/${job.id}`} className="group block rounded-2xl border border-border/80 bg-background p-5 shadow-[0_8px_30px_-25px_rgba(20,35,66,.18)] transition-all hover:-translate-y-0.5 hover:border-primary/25 hover:shadow-[0_16px_35px_-24px_rgba(35,65,120,.25)] sm:p-6">
     <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
       <div className="flex min-w-0 gap-3.5">
-        <span className="grid size-11 shrink-0 place-items-center rounded-xl bg-[#eaf0ff] text-primary"><Briefcase size={21} weight="duotone" /></span>
+        <span className="grid size-11 shrink-0 place-items-center rounded-xl bg-primary/10 text-primary"><Briefcase size={21} weight="duotone" /></span>
         <div className="min-w-0">
           <div className="mb-1.5 flex flex-wrap items-center gap-2">
             <span className="text-[11px] font-medium text-muted-foreground">{job.client?.profile?.displayName || t("Archer client")}</span>
@@ -136,7 +136,7 @@ function JobCard({ job }: { job: Job }) {
           <p className="mt-2 line-clamp-2 max-w-3xl text-sm leading-6 text-muted-foreground">{job.description}</p>
           <div className="mt-4 flex flex-wrap items-center gap-2">
             <span className="rounded-full bg-muted px-3 py-1.5 text-[11px] font-medium text-muted-foreground">{job.budgetType === "HOURLY" ? t("Hourly") : t("Fixed price")}</span>
-            {job.currency === "MMK" && <span className="rounded-full bg-amber-50 px-3 py-1.5 text-[11px] font-medium text-amber-800">{t("MMK project")}</span>}
+            {job.currency === "MMK" && <span className="rounded-full bg-amber-50 px-3 py-1.5 text-[11px] font-medium text-amber-800 dark:bg-amber-950 dark:text-amber-200">{t("MMK project")}</span>}
             {job._count && <span className="flex items-center gap-1.5 text-[11px] text-muted-foreground"><UsersThree size={14} /> {job._count.proposals} {t(job._count.proposals === 1 ? "proposal" : "proposals")}</span>}
           </div>
         </div>

@@ -1,8 +1,9 @@
 import { useMutation } from "@tanstack/react-query"
 import { ArrowLeft, Briefcase, Check, LockKey, Sparkle, User } from "@phosphor-icons/react"
 import { useEffect, useState, type FormEvent } from "react"
-import { Link, useNavigate } from "react-router"
+import { Link, useNavigate, useSearchParams } from "react-router"
 import { Button } from "@/components/ui/button"
+import { ThemeToggle } from "@/components/theme-toggle"
 import { useAuth } from "@/lib/auth-context"
 import { ApiError } from "@/lib/api"
 import { LanguageSwitcher, useI18n } from "@/i18n"
@@ -12,7 +13,8 @@ export function AuthPage({ mode }: { mode: "login" | "register" }) {
   const { t } = useI18n()
   const { signIn, register, user } = useAuth()
   const navigate = useNavigate()
-  const [role, setRole] = useState<"CLIENT" | "FREELANCER">("FREELANCER")
+  const [searchParams] = useSearchParams()
+  const [role, setRole] = useState<"CLIENT" | "FREELANCER">(searchParams.get("role") === "CLIENT" ? "CLIENT" : "FREELANCER")
   const mutation = useMutation({
     mutationFn: async (form: FormData) => {
       if (isRegister) {
@@ -38,10 +40,10 @@ export function AuthPage({ mode }: { mode: "login" | "register" }) {
 
   return <main className="grid min-h-svh lg:grid-cols-[1.05fr_0.95fr]">
     <section className="flex flex-col px-5 py-6 sm:px-10 lg:px-14">
-      <Link to="/" className="inline-flex w-fit items-center gap-2 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground">
+      <Link to="/jobs" className="inline-flex w-fit items-center gap-2 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground">
         <ArrowLeft size={17} /> {t("Back to jobs")}
       </Link>
-      <div className="mt-4"><LanguageSwitcher /></div>
+      <div className="mt-4 flex items-center gap-2"><LanguageSwitcher /><ThemeToggle /></div>
       <div className="mx-auto flex w-full max-w-[440px] flex-1 flex-col justify-center py-14">
         <Link to="/" className="mb-10 flex w-fit items-center gap-2.5 text-xl font-semibold tracking-[-0.06em] text-foreground">
           <span className="grid size-9 place-items-center rounded-xl bg-primary text-primary-foreground"><Sparkle weight="fill" size={19} /></span>

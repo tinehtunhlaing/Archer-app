@@ -29,8 +29,8 @@ function MyProposals() {
 function ProposalCard({ proposal, onWithdraw, withdrawing }: { proposal: Proposal; onWithdraw: () => void; withdrawing: boolean }) {
   const { t, locale } = useI18n()
   const statusStyle = {
-    PENDING: "bg-amber-50 text-amber-800",
-    REJECTED: "bg-rose-50 text-rose-700",
+    PENDING: "bg-amber-50 text-amber-800 dark:bg-amber-950 dark:text-amber-200",
+    REJECTED: "bg-rose-50 text-rose-700 dark:bg-rose-950 dark:text-rose-200",
     WITHDRAWN: "bg-muted text-muted-foreground",
   }[proposal.status]
   return <article className="rounded-2xl border border-border/80 bg-background p-5 sm:p-6">

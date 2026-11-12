@@ -10,9 +10,7 @@ cp .env.example .env
 npm run dev
 ```
 
-The app expects the API at `http://localhost:4000/api`. Set `VITE_API_URL` in `.env` to use another API origin. Make sure the API is running and its database has been migrated.
-
-To create the local demo data and accounts, run `npm run db:seed` from the sibling `api/` project.
+The app expects the API at `http://localhost:4000/api`. Set `VITE_API_URL` in `.env` to use another API origin. Make sure the API is running and its database has been migrated. See the [Archer API repository](https://github.com/tinehtunhlaing/Archer-api) for API setup and local demo data.
 
 ## Commands
 

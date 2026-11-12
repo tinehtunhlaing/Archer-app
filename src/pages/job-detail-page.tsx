@@ -83,7 +83,7 @@ export function JobDetailPage() {
 
         {!ownsJob && <section className="rounded-3xl border border-border/80 bg-background p-6 sm:p-8">
           {submitted ? <div className="py-3 text-center">
-            <span className="mx-auto grid size-12 place-items-center rounded-2xl bg-emerald-50 text-emerald-700"><Check size={22} weight="bold" /></span>
+            <span className="mx-auto grid size-12 place-items-center rounded-2xl bg-emerald-50 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-200"><Check size={22} weight="bold" /></span>
             <h2 className="mt-4 text-xl font-semibold tracking-tight">{t("Your proposal is on its way")}</h2>
             <p className="mx-auto mt-2 max-w-md text-sm leading-6 text-muted-foreground">{t("The client can now review your proposal and message you about the project.")}</p>
             <div className="mt-4 flex flex-wrap justify-center gap-5"><Link to="/proposals" className="text-sm font-semibold text-primary hover:underline">{t("See your proposals")}</Link>{conversationId && <Link to={`/messages/${conversationId}`} className="text-sm font-semibold text-primary hover:underline">{t("Open conversation")}</Link>}</div>
@@ -106,7 +106,7 @@ export function JobDetailPage() {
         <section className="rounded-3xl border border-border/80 bg-background p-6">
           <p className="text-[11px] font-semibold tracking-[0.16em] text-muted-foreground uppercase">{t("Posted by")}</p>
           <div className="mt-4 flex items-center gap-3">
-            <span className="grid size-12 place-items-center rounded-2xl bg-[#eaf0ff] text-lg font-semibold text-primary">{job.client?.profile?.displayName?.slice(0, 1).toUpperCase() || "A"}</span>
+            <span className="grid size-12 place-items-center rounded-2xl bg-primary/10 text-lg font-semibold text-primary">{job.client?.profile?.displayName?.slice(0, 1).toUpperCase() || "A"}</span>
             <div><p className="font-semibold">{job.client?.profile?.displayName || t("Archer client")}</p><p className="mt-0.5 text-xs text-muted-foreground">{t("Client on Archer")}</p></div>
           </div>
           <div className="my-5 border-t border-border/70" />
@@ -117,9 +117,9 @@ export function JobDetailPage() {
           </div>
           {ownsJob && <Link to={`/jobs/${job.id}`} className="mt-5 flex h-10 items-center justify-center rounded-xl border border-border text-sm font-medium transition-colors hover:bg-muted">{t("Manage project")}</Link>}
         </section>
-        <div className="rounded-2xl bg-[#e9efff] p-5">
-          <p className="text-sm font-semibold text-[#1d3a79]">{t("Keep it clear, keep it kind.")}</p>
-          <p className="mt-1.5 text-xs leading-5 text-[#52658f]">{t("Talk through scope and expectations before you get started. Archer does not process payments yet.")}</p>
+        <div className="rounded-2xl bg-primary/5 p-5">
+          <p className="text-sm font-semibold text-primary">{t("Keep it clear, keep it kind.")}</p>
+          <p className="mt-1.5 text-xs leading-5 text-muted-foreground">{t("Talk through scope and expectations before you get started. Archer does not process payments yet.")}</p>
         </div>
       </aside>
     </div>
