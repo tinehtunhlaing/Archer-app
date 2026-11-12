@@ -23,15 +23,18 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setUser(account)
   }, [])
 
+  const fetchUser = useCallback(() => apiRequest<User>("/auth/me"), [])
+
   useEffect(() => {
     if (!getAccessToken()) return
     let active = true
-    refreshUser()
+    fetchUser()
+      .then((account) => { if (active) setUser(account) })
       .then(() => { if (active) setReady(true) })
       .catch(() => { if (active) setAccessToken(null) })
       .finally(() => { if (active) setReady(true) })
     return () => { active = false }
-  }, [refreshUser])
+  }, [fetchUser])
 
   const acceptAuth = useCallback((response: AuthResponse) => {
     setAccessToken(response.accessToken)
